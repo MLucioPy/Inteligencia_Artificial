@@ -1,4 +1,4 @@
-# Inteligencia_Artificial
+# Inteligencia Artificial
 Predição Futura do Nível de Tanques Industriais utilizando Inteligência Artificial.
 
 # Random Forest vs. Rede Neural LSTM
@@ -81,6 +81,8 @@ python treinar_lstm.py
 
 ```bash
 streamlit run app.py
+
+---
 
 ## 🎓 Finalidade Acadêmica e Créditos
 
