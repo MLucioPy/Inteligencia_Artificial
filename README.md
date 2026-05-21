@@ -2,6 +2,8 @@
 
 # Random Forest vs. Rede Neural LSTM
 
+👉 **[Acesso na nuvem clicando aqui!](https://tanque-ia-ifsp.streamlit.app/)** ☁️
+
 Este repositório contém o ecossistema completo de desenvolvimento para a predição e o monitoramento do nível de um reservatório industrial. O projeto foi estruturado com foco em rigor científico e aplicabilidade prática em sistemas de automação de chão de fábrica, servindo como base para o Trabalho de Conclusão da Matéria Inteligência Artificial do **Instituto Federal de São Paulo (IFSP)**.
 
 O objetivo do sistema é prever o comportamento dinâmico do volume interno do tanque em um horizonte preditivo de **5 minutos no futuro (T + 5 min)**. Isso permite tomadas de decisão antecipadas por parte das equipes de instrumentação e controle, mitigando riscos de transbordamento ou desabastecimento.
@@ -48,12 +50,14 @@ Para garantir a confiabilidade operacional exigida pelo setor industrial e pela 
 
 ---
 
-## 🚀 Como Executar o Projeto Localmente
-
 ## 🎓 Finalidade Acadêmica e Créditos
 Este projeto foi desenvolvido como artefato prático-tecnológico para a defesa pública do Trabalho na Matéria de Inteligência Artificial do Instituto Federal de São Paulo (IFSP).
 
 A aplicação simula com sucesso uma arquitetura em ambiente computacional otimizado para CPU, ideal para demonstrações em tempo real de integração entre Engenharia de Dados e Inteligência Artificial Aplicada ao Chão de Fábrica.
+
+---
+
+## 🚀 Como Executar o Projeto Localmente
 
 ### 1. Instalação das Dependências
 Certifique-se de ter o Python 3.12 (ou superior) instalado. Abra o terminal na pasta raiz do projeto e execute o comando abaixo para instalar o ecossistema necessário:
