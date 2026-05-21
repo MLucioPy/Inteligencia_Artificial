@@ -1,9 +1,8 @@
-# Inteligencia Artificial
-Predição Futura do Nível de Tanques Industriais utilizando Inteligência Artificial.
+# Inteligência Artificial
 
 # Random Forest vs. Rede Neural LSTM
 
-Este repositório contém o ecossistema completo de desenvolvimento de um **Gêmeo Digital de Processos** para a predição e o monitoramento preditivo do nível de um reservatório industrial. O projeto foi estruturado com foco em rigor científico e aplicabilidade prática em sistemas de automação de chão de fábrica, servindo como base para o Trabalho Acadêmico de Inteligência Artificial do **Instituto Federal de São Paulo (IFSP)**.
+Este repositório contém o ecossistema completo de desenvolvimento para a predição e o monitoramento do nível de um reservatório industrial. O projeto foi estruturado com foco em rigor científico e aplicabilidade prática em sistemas de automação de chão de fábrica, servindo como base para o Trabalho de Conclusão da Matéria Inteligência Artificial do **Instituto Federal de São Paulo (IFSP)**.
 
 O objetivo do sistema é prever o comportamento dinâmico do volume interno do tanque em um horizonte preditivo de **5 minutos no futuro (T + 5 min)**. Isso permite tomadas de decisão antecipadas por parte das equipes de instrumentação e controle, mitigando riscos de transbordamento ou desabastecimento.
 
@@ -35,7 +34,7 @@ O projeto está subdividido em scripts modulares que organizam o ciclo de vida d
 * 📄 `analise_dataset_preparado.py`: Executa a auditoria de dados pós-processamento. Avalia a assimetria (*skewness*), a matriz de correlação de Pearson e quantifica o ganho de informação não-linear (*feature importance*) de cada sensor através de uma árvore base.
 * 📄 `treinar_random_forest.py`: Pipeline focado na construção do modelo de árvores, aplicando divisão cronológica estrita (80% treino / 20% teste) para respeitar a linha contínua do tempo. Exporta o arquivo compactado `modelo_random_forest.pkl`.
 * 📄 `treinar_lstm.py`: Pipeline focado na estruturação do modelo de Deep Learning no formato 3D exigido pelo TensorFlow. Implementa a sintaxe moderna do Keras 3 (camada `Input` explícita) e salva a rede como `modelo_lstm.keras`.
-* 📄 `app.py`: Interface gráfica responsiva e de alta performance criada em **Streamlit**. Permite a simulação em tempo real através de sliders, apresenta tomada de decisão adaptativa e exibe uma área nobre focada em auditoria estatística visual.
+* 📄 `app.py`: Interface gráfica responsiva e de alta performance criada em **Streamlit**. Permite a simulação em tempo real através de sliders, apresenta tomada de decisão adaptativa e exibe uma área nobre focada em auditoria estatística visual de métricas (MAE, RMSE, R²).
 
 ---
 
@@ -51,41 +50,13 @@ Para garantir a confiabilidade operacional exigida pelo setor industrial e pela 
 
 ## 🚀 Como Executar o Projeto Localmente
 
+## 🎓 Finalidade Acadêmica e Créditos
+Este projeto foi desenvolvido como artefato prático-tecnológico para a defesa pública do Trabalho na Matéria de Inteligência Artificial do Instituto Federal de São Paulo (IFSP).
+
+A aplicação simula com sucesso uma arquitetura em ambiente computacional otimizado para CPU, ideal para demonstrações em tempo real de integração entre Engenharia de Dados e Inteligência Artificial Aplicada ao Chão de Fábrica.
+
 ### 1. Instalação das Dependências
 Certifique-se de ter o Python 3.12 (ou superior) instalado. Abra o terminal na pasta raiz do projeto e execute o comando abaixo para instalar o ecossistema necessário:
 
 ```bash
 pip install tensorflow-cpu streamlit scikit-learn pandas numpy matplotlib joblib
-
-### Passo 01: Tratamento e Higienização dos Dados Brutos:
-
-```bash
-python preparar_dataset.py
-
-### Passo 02: Auditoria Estatística e Relevância de Recursos:
-
-```bash
-python analise_dataset_preparado.py
-
-### Passo 03: Treinamento e Exportação do Modelo Random Forest:
-
-```bash
-python treinar_random_forest.py
-
-### Passo 04: Treinamento e Ajuste de Pesos Sinápticos da LSTM:
-
-```bash
-python treinar_lstm.py
-
-### Passo 05: Inicializando o Dashboard:
-
-```bash
-streamlit run app.py
-
----
-
-## 🎓 Finalidade Acadêmica e Créditos
-
-Este projeto foi desenvolvido como artefato prático-tecnológico para a defesa pública do Trabalho de Conclusão da Matéria de Inteligência Artificial do Instituto Federal de São Paulo (IFSP).
-
-A aplicação simula com sucesso uma arquitetura industrial em ambiente computacional otimizado para CPU, ideal para demonstrações em tempo real de integração entre Engenharia de Dados e Inteligência Artificial Aplicada ao Chão de Fábrica.
