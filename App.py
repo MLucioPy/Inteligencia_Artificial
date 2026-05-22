@@ -206,7 +206,7 @@ elif "Comparar Ambos" in opcao_modelo:
 # 7. EXIBIÇÃO DE ALTA PERFORMANCE COM MAXIMA ÊNFASE EM MAE, RMSE E R²
 # ==============================================================================
 st.write("##")
-st.markdown("### 🏆 Rigor Estatístico: Indicadores de Validação Histórica (Etapa 5)")
+st.markdown("### 🏆 Rigor Estatístico: Indicadores de Validação")
 st.markdown("""
 A validação técnica é auditada sob três perspectivas matemáticas complementares:
 * **MAE (Erro Médio Absoluto):** Mede o desvio médio linear das previsões. Como não eleva os resíduos ao quadrado, reflete o erro operacional típico esperado na rotina estável da planta.
