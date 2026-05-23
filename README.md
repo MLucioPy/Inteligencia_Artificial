@@ -17,36 +17,71 @@ O ecossistema realiza o confronto direto entre duas abordagens tecnológicas con
 1. **Random Forest Regressor:** Abordagem baseada em comitês de árvores de decisão. Apresenta alta robustez contra multicolinearidade e grande estabilidade em transições rápidas de sinais.
 2. **Rede Neural Recorrente LSTM (Long Short-Term Memory):** Abordagem baseada em *Deep Learning*. É projetada estruturalmente com blocos de memória capazes de reter dependências e a inércia temporal de longo prazo inerente ao transporte hidráulico de fluidos.
 
-### Variáveis Monitoradas (Inputs do Modelo)
-* **Nível Atual do Tanque (%)**
-* **Vazão de Entrada (L/h)**
-* **Vazão de Saída / Consumo Downstream (L/h)**
-* **Velocidade do Inversor de Frequência da Bomba (%)**
+---
 
-### Variável Alvo (Target)
-* **Nível Futuro do Tanque (%)** em T + 30 passos (equivalente a 5 minutos à frente, com taxa de amostragem de 10 segundos).
+## 📊 Relatório de Integridade e Caracterização Estatística dos Dados
+
+Os dados operacionais coletados no chão de fábrica foram auditados e caracterizados para garantir a máxima robustez e confiabilidade durante o processo de modelagem preditiva das duas inteligências artificiais.
+
+### 1. Auditoria de Integridade e Temporalidade
+* **Janela Temporal de Amostragem:** 16 de Maio de 2026 às 12:00:00 até 21 de Maio de 2026 às 11:59:50.
+* **Volume do Dataset Bruto:** 43.200 registros sequenciais.
+* **Frequência de Varredura:** 1 registro a cada 10 segundos (Rigidamente Estável).
+* **Consistência Perfeita:** Foram identificadas e validadas 43.199 conexões temporais consecutivas exatas de 10 segundos, confirmando a ausência completa de lacunas, falhas de comunicação (*gaps*) ou perda de pacotes de dados (*data drops*).
+
+### 2. Análise Descritiva das Variáveis de Processo
+A tabela abaixo consolida o comportamento estatístico das variáveis operacionais distribuídas no dataset:
+
+| Métrica Estatística | Nível Atual (%) | Vazão Entrada (u.n.) | Vazão Saída (u.n.) | Velocidade Inversor Entrada (u.n.) |
+| :--- | :---: | :---: | :---: | :---: |
+| **Média** | 63,5513% | 0,4460 | 0,4429 | 0,3811 |
+| **Desvio Padrão (Std)** | 14,3577% | 0,3884 | 0,2294 | 0,3321 |
+| **Valor Mínimo (Min)** | 16,9132% | 0,0000 | 0,0000 | 0,0000 |
+| **Quartil 25%** | 56,1100% | 0,0000 | 0,2835 | 0,0000 |
+| **Mediana (50%)** | 66,7426% | 0,5109 | 0,4461 | 0,4360 |
+| **Quartil 75%** | 73,7800% | 0,8127 | 0,6179 | 0,6943 |
+| **Valor Máximo (Max)** | 88,4219% | 1,0000 | 0,9111 | 0,9999 |
+
+### 3. Coerência Operacional e Filtros de Chão de Fábrica
+Para blindar os modelos preditivos contra ruídos decorrentes de manobras de campo e inconsistências físicas, a base de dados passou por regras de validação baseadas no comportamento hidráulico real:
+* **Inércia de Bomba Desligada:** 17.511 registros (40,53% do tempo) apresentam a velocidade do inversor e a vazão de entrada completamente zeradas. Nesses períodos, qualquer subida abrupta indevida de nível foi tratada para evitar falsas correlações.
+* **Vazão de Saída Nula:** Em 1.635 registros (3,78% do tempo), a válvula de saída esteve totalmente fechada. Quedas indevidas de nível nesse cenário foram filtradas e estabilizadas.
+* **Planta em Repouso Absoluto:** Foram validados 1.134 registros (2,62% do tempo) com todas as variáveis de fluxo e potência simultaneamente em zero.
+* **Eliminação de Manobras Manuais:** Durante a análise de coerência, foram detectadas e eliminadas com sucesso exatamente **600 amostras** associadas a manobras manuais de drenagem ou intervenções externas na planta, estabilizando o horizonte futuro para a IA.
+
+### 4. Força de Acoplamento Linear e Heurística Não-Linear
+O acoplamento matemático entre as variáveis preditoras e o alvo preditivo (**Nível Futuro em T + 5 min**) foi mensurado por duas abordagens concorrentes:
+
+* **Associação Linear (Correlação de Pearson):**
+  * *Nível Atual:* +0,8616 (Altíssimo acoplamento dinâmico positivo)
+  * *Vazão Entrada:* +0,3236
+  * *Velocidade Inversor Entrada:* +0,3099
+  * *Vazão Saída:* +0,1870
+* **Importância Não-Linear (Heurística de Árvores do Random Forest):**
+  * *Nível Atual:* Peso de 86,58% no aprendizado
+  * *Vazão Entrada:* Peso de 9,56% no aprendizado
+  * *Vazão Saída:* Peso de 2,49% no aprendizado
+  * *Velocidade Inversor Entrada:* Peso de 1,37% no aprendizado
 
 ---
 
-## 📂 Arquitetura do Repositório
+## 🏆 Desempenho dos Modelos e Rigor Estatístico
 
-O projeto está subdividido em scripts modulares que organizam o ciclo de vida dos dados de forma limpa e sequencial:
+A validação técnica e a auditoria dos modelos preditivos foram realizadas de forma cronológica rígida, utilizando as amostras finais segregadas como dados inéditos de teste (8.535 linhas). 
 
-* 📄 `preparar_dataset.py`: Realiza a engenharia de recursos, suavização de ruídos de alta frequência através de média móvel e injeção de restrições físicas industriais (detecção e remoção de manobras manuais de dreno não medidas). Aplica normalização Min-Max nas entradas.
-* 📄 `analise_dataset_preparado.py`: Executa a auditoria de dados pós-processamento. Avalia a assimetria (*skewness*), a matriz de correlação de Pearson e quantifica o ganho de informação não-linear (*feature importance*) de cada sensor através de uma árvore base.
-* 📄 `treinar_random_forest.py`: Pipeline focado na construção do modelo de árvores, aplicando divisão cronológica estrita (80% treino / 20% teste) para respeitar a linha contínua do tempo. Exporta o arquivo compactado `modelo_random_forest.pkl`.
-* 📄 `treinar_lstm.py`: Pipeline focado na estruturação do modelo de Deep Learning no formato 3D exigido pelo TensorFlow. Implementa a sintaxe moderna do Keras 3 (camada `Input` explícita) e salva a rede como `modelo_lstm.keras`.
-* 📄 `app.py`: Interface gráfica responsiva e de alta performance criada em **Streamlit**. Permite a simulação em tempo real através de sliders, apresenta tomada de decisão adaptativa e exibe uma área nobre focada em auditoria estatística visual de métricas (MAE, RMSE, R²).
+As métricas são complementares: o **MAE** aponta o desvio linear típico do dia a dia, o **RMSE** penaliza grandes desvios transientes (garantindo a segurança operacional contra transbordamentos) e o **R² Score** mede o ajuste geométrico das curvas de predição em relação à realidade.
 
----
+### 🌲 1. Random Forest Regressor
+O comitê composto por 100 árvores de decisão processou os nós no processador com altíssima eficiência, alcançando uma estabilidade geométrica impressionante:
+* **MAE (Erro Linear Médio):** 0,2937 %
+* **RMSE (Risco de Planta/Segurança):** 1,2178 %
+* **R² Score (Aderência Global):** 0,9526 (95,26% de precisão explicada)
 
-## ⚙️ Indicadores de Desempenho Técnico (Métricas de Validação)
-
-Para garantir a confiabilidade operacional exigida pelo setor industrial e pela banca examinadora, os modelos são submetidos a três auditorias estatísticas complementares:
-
-1. **MAE (Erro Médio Absoluto):** Analisa a magnitude média linear dos erros residuais, apontando o desvio padrão da rotina de controle permanente da planta.
-2. **RMSE (Erro Quadrático Médio):** Indicador crítico de processo. Como eleva os desvios ao quadrado antes de extrair a média, ele penaliza severamente grandes erros transientes. Valores baixos de RMSE garantem que o modelo é seguro e está livre de falhas preditivas graves que colocariam a integridade mecânica do tanque em risco.
-3. **R² Score (Coeficiente de Determinação):** Quantifica o nível de aderência e ajuste geométrico global do modelo preditivo em relação aos dados reais de chão de fábrica.
+### 🧠 2. Rede Neural Recorrente LSTM (Deep Learning)
+A arquitetura balanceada com 32 neurônios e camadas de Dropout, treinada com memória hidráulica de longo prazo (30 passos), demonstrou excelente suavização temporal:
+* **MAE (Erro Médio Absoluto):** 0,7957 %
+* **RMSE (Risco Industrial):** 2,8284 %
+* **R² Score (Aderência Global):** 0,7368 (73,68% de precisão explicada)
 
 ---
 
@@ -54,13 +89,3 @@ Para garantir a confiabilidade operacional exigida pelo setor industrial e pela 
 Este projeto foi desenvolvido como artefato prático-tecnológico para a defesa pública do Trabalho na Matéria de Inteligência Artificial do Instituto Federal de São Paulo (IFSP).
 
 A aplicação simula com sucesso uma arquitetura em ambiente computacional otimizado para CPU, ideal para demonstrações em tempo real de integração entre Engenharia de Dados e Inteligência Artificial Aplicada ao Chão de Fábrica.
-
----
-
-## 🚀 Como Executar o Projeto Localmente
-
-### 1. Instalação das Dependências
-Certifique-se de ter o Python 3.12 (ou superior) instalado. Abra o terminal na pasta raiz do projeto e execute o comando abaixo para instalar o ecossistema necessário:
-
-```bash
-pip install tensorflow-cpu streamlit scikit-learn pandas numpy matplotlib joblib
